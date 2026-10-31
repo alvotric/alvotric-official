@@ -1,12 +1,10 @@
-import { PageHeader } from "@/components/ui/PageHeader";
-import { Section } from "@/components/ui/Section";
+import Link from "next/link";
+import { GeistMono } from "geist/font/mono";
 import { StatusBadge } from "@/components/ui/Badge";
-import { LinkButton } from "@/components/ui/Button";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { CtaBand } from "@/components/sections/CtaBand";
-import { Container } from "@/components/ui/Container";
-import { TiltCard } from "@/components/ui/TiltCard";
-import { WorkflowPanel } from "@/components/visual/WorkflowPanel";
+import { AlvoStage } from "@/components/alvo/AlvoStage";
+import { AlvoConsole } from "@/components/alvo/AlvoConsole";
+import "@/components/alvo/alvo.css";
 import { alvo } from "@/content/products";
 import { absoluteUrl, alvoLink, siteConfig } from "@/content/site.config";
 import { pageMetadata } from "@/lib/metadata";
@@ -18,25 +16,90 @@ export const metadata = pageMetadata({
   path: "/products/alvo",
 });
 
-const steps = [
+const features = [
   {
-    title: "Describe the task",
-    body: "Write what should happen, in plain language.",
+    title: "Workflow orchestration",
+    body: "Chain automations together, set dependencies and decide what runs when. One failure does not take the rest down.",
+    icon: (
+      <>
+        <circle cx="5" cy="6" r="2.5" />
+        <circle cx="19" cy="6" r="2.5" />
+        <circle cx="12" cy="18" r="2.5" />
+        <path d="M7 7.5 11 16M17 7.5 13 16M7.5 6h9" />
+      </>
+    ),
   },
   {
-    title: "Review the workflow",
-    body: "Alvo assembles triggers, logic, and actions. You read it, and change what is not right.",
+    title: "Live monitoring",
+    body: "Watch every run as it happens. Status, duration and output are one click away, with full logs kept for review.",
+    icon: <path d="M3 12h4l3-8 4 16 3-8h4" />,
   },
   {
-    title: "Run it",
-    body: "Turn the workflow on and watch what it does.",
+    title: "Schedules and triggers",
+    body: "Start workflows on a timer, a webhook, a form or an event from another app. Pause and resume without losing settings.",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </>
+    ),
+  },
+  {
+    title: "Retries and recovery",
+    body: "Failed runs retry with backoff, then raise an alert. Re-run any step from the point where it stopped.",
+    icon: (
+      <>
+        <path d="M3 12a9 9 0 0 1 15.5-6.2L21 8" />
+        <path d="M21 3v5h-5" />
+        <path d="M21 12a9 9 0 0 1-15.5 6.2L3 16" />
+        <path d="M3 21v-5h5" />
+      </>
+    ),
+  },
+  {
+    title: "Roles and audit trail",
+    body: "Decide who can view, edit or run each workflow. Every change is recorded with a name and a time.",
+    icon: (
+      <>
+        <rect x="4" y="11" width="16" height="10" rx="2" />
+        <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+      </>
+    ),
+  },
+  {
+    title: "Smart alerts",
+    body: "Send the right alert to the right person on email, Slack or WhatsApp. Quiet when things work, loud when they do not.",
+    icon: (
+      <>
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+      </>
+    ),
   },
 ];
 
+const steps = [
+  { title: "Connect", body: "Link the platforms and tools your automations already use. Existing workflows show up as they are." },
+  { title: "Organise", body: "Group workflows by team or project, set owners, schedules and alert rules once." },
+  { title: "Monitor and control", body: "Track every run, fix failures fast and keep a record of everything that changed." },
+];
+
+const tools = ["Webhooks", "Slack", "Gmail", "Google Sheets", "WhatsApp", "Notion", "Stripe", "REST APIs"];
+
 export default function AlvoPage() {
   const link = alvoLink();
+  const primary = link.external ? (
+    <a className="btn primary" href={link.href} target="_blank" rel="noopener noreferrer">
+      {link.label}
+    </a>
+  ) : (
+    <Link className="btn primary" href={link.href}>
+      {link.label}
+    </Link>
+  );
+
   return (
-    <>
+    <div className={`alvx ${GeistMono.variable}`}>
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -48,72 +111,124 @@ export default function AlvoPage() {
           publisher: { "@type": "Organization", name: siteConfig.name },
         }}
       />
-      <PageHeader title="Alvo" lede={alvo.summary}>
-        <StatusBadge status={alvo.status} />
-        <LinkButton href={link.href} external={link.external} size="lg">
-          {link.label}
-        </LinkButton>
-      </PageHeader>
 
-      <section aria-labelledby="alvo-overview-heading" className="section-glow border-b border-line">
-        <Container className="py-20 sm:py-24 lg:py-32">
-          <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-5">
-              <h2 id="alvo-overview-heading" className="max-w-[14ch] text-[clamp(2rem,4.2vw,3.5rem)] font-semibold leading-[1.05]">
-                Where Alvo stands
-              </h2>
-              <p className="mt-6 max-w-[46ch] text-lg text-muted">
-                Alvo is under active development and testing. This page describes what we are building. A
-                capability is not described as ready for production until it has been verified, and the public
-                sign-up journey is still being checked.
-              </p>
+      {/* Hero */}
+      <div className="hero">
+        <div className="wrap hero-grid">
+          <div className="hero-copy">
+            <div className="tagrow">
+              <span className="eyebrow">Automation management platform</span>
+              <StatusBadge status={alvo.status} />
             </div>
-            <div className="lg:col-span-7">
-              <TiltCard className="rounded-[var(--radius-card)] pt-10" max={3}>
-                <WorkflowPanel idPrefix="alvo-page" stacked />
-              </TiltCard>
-              <p className="mt-4 text-[0.8125rem] text-subtle">Illustration of the intended interface.</p>
+            <h1>
+              Every automation. <em>One calm</em> control room.
+            </h1>
+            <p className="lead">
+              Alvo sits above your workflows, bots and scheduled jobs. See what is running, fix what failed and
+              control who can change what, all from one place.
+            </p>
+            <div className="cta-row">
+              {primary}
+              <a className="btn ghost" href="#console">
+                See the console
+              </a>
+            </div>
+            <div className="proof">
+              <span><i />Runs, retries and logs</span>
+              <span><i />Schedules and triggers</span>
+              <span><i />Roles and audit trail</span>
             </div>
           </div>
-        </Container>
+          <AlvoStage />
+        </div>
+      </div>
+
+      {/* Console */}
+      <section className="console-sec" id="console">
+        <div className="wrap">
+          <div className="head">
+            <span className="eyebrow">The console</span>
+            <h2>Your whole automation stack on a single screen.</h2>
+            <p>Move your mouse over the console to tilt it. Hit Retry on the failed run to see how recovery looks.</p>
+          </div>
+          <AlvoConsole />
+          <p className="note">Sample data shown for illustration. Alvo is in development.</p>
+        </div>
       </section>
 
-      <Section id="how" layout="split" title="How Alvo is meant to work">
-        <ol className="grid gap-10 sm:grid-cols-3">
-          {steps.map((step, index) => (
-            <li key={step.title} className="border-t border-line-strong pt-6">
-              <p className="text-sm font-medium text-subtle">Step {index + 1}</p>
-              <h3 className="mt-2 text-xl font-semibold">{step.title}</h3>
-              <p className="mt-3 text-muted">{step.body}</p>
-            </li>
-          ))}
-        </ol>
-      </Section>
+      {/* Features */}
+      <section id="features">
+        <div className="wrap">
+          <div className="head">
+            <span className="eyebrow">Features</span>
+            <h2>Built for the people who keep automations alive.</h2>
+            <p>Building a workflow is the easy part. Alvo covers everything that happens after it goes live.</p>
+          </div>
+          <div className="grid">
+            {features.map((f) => (
+              <article className="card" key={f.title}>
+                <div className="ico">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    {f.icon}
+                  </svg>
+                </div>
+                <h3>{f.title}</h3>
+                <p>{f.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <Section id="capabilities" layout="split" title="Capabilities" tone="elevated">
-        <ul className="divide-y divide-line border-y border-line-strong">
-          {alvo.capabilities.map((c) => (
-            <li key={c.title} className="flex flex-col gap-4 py-8 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
-              <div>
-                <h3 className="text-xl font-semibold sm:text-2xl">{c.title}</h3>
-                <p className="mt-2 max-w-[48ch] text-muted">{c.description}</p>
+      {/* Steps */}
+      <section className="steps-sec" id="flow">
+        <div className="wrap">
+          <div className="head">
+            <span className="eyebrow">How it works</span>
+            <h2>From scattered scripts to one managed system.</h2>
+          </div>
+          <div className="steps">
+            {steps.map((s, i) => (
+              <div className="step" key={s.title}>
+                <div className="n">STEP 0{i + 1}</div>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
               </div>
-              <div className="shrink-0 sm:pt-1">
-                <StatusBadge status={c.status} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </Section>
+            ))}
+          </div>
+          <div className="tools" aria-label="Intended integrations">
+            {tools.map((t) => (
+              <span key={t}>{t}</span>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <Section id="built-by" layout="split" title="Built by Alvotric">
-        <p className="max-w-[40ch] text-[clamp(1.375rem,2.2vw,1.875rem)] leading-[1.35] text-muted">
-          Alvo is developed by Alvotric, an independent technology company. Sign-in and account details belong
-          to the Alvo application itself; this website describes the company and its products.
-        </p>
-      </Section>
-
-      <CtaBand title="Questions about Alvo?" />
-    </>
+      {/* CTA */}
+      <section id="start">
+        <div className="wrap">
+          <div className="cta">
+            <div>
+              <h2>Ready to run your automations with confidence?</h2>
+              <p>Bring every workflow under one roof and know what is happening before your customers do.</p>
+            </div>
+            <div className="acts">
+              {link.external ? (
+                <a className="btn white" href={link.href} target="_blank" rel="noopener noreferrer">
+                  {link.label}
+                </a>
+              ) : (
+                <Link className="btn white" href={link.href}>
+                  {link.label}
+                </Link>
+              )}
+              <Link className="btn line" href="/contact">
+                Contact Alvotric
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
