@@ -1,0 +1,523 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. This is the single source of truth for color and typography.
+ * Palette supplied by the owner; --text-subtle, --border-strong, --surface-hover
+ * and status colors were added during implementation (contrast checked, see README).
+ */
+:root {
+  color-scheme: light;
+
+  /* White and blue. Soft blue-tinted whites, navy text, one electric blue accent. */
+  --bg: #f4f8ff;
+  --bg-elevated: #ffffff;
+  --surface: #ffffff;
+  --surface-hover: #eef4ff;
+
+  --border: #dce6f7;
+  --border-strong: #bfd1ee;
+
+  --text: #0c1a3d;
+  --text-muted: #46567a;
+  --text-subtle: #5b6b8e;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4fd8;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgb(37 99 235 / 0.1);
+  --accent-grad: linear-gradient(135deg, #1d63f0 0%, #4a55ee 60%, #6b4deb 100%);
+
+  --warning: #d97706;
+  --success: #059669;
+  --focus-ring: #2563eb;
+
+  --radius-control: 8px;
+  --radius-card: 18px;
+  --header-height: 4rem;
+
+  /* Blue rim light used on hover, focus and floating panels. */
+  --rim: 0 0 0 1px rgb(37 99 235 / 0.5), 0 24px 60px -24px rgb(37 99 235 / 0.5);
+  --panel-shadow: inset 0 1px 0 #fff, 0 34px 60px -32px rgb(37 99 235 / 0.4),
+    0 10px 28px -14px rgb(15 40 100 / 0.18), 0 0 0 1px rgb(37 99 235 / 0.04);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-elevated: var(--bg-elevated);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ink: var(--text);
+  --color-muted: var(--text-muted);
+  --color-subtle: var(--text-subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-accent-soft: var(--accent-soft);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  --radius-control: 8px;
+  --radius-card: 18px;
+}
+
+html {
+  background: var(--bg);
+  scroll-padding-top: calc(var(--header-height) + 1rem);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(37 99 235 / 0.22);
+  color: var(--text);
+}
+
+/* Visible keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Headings share one tone: tight, confident, never decorative. */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Hairline structure. */
+.rule {
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Atmosphere (edge-to-edge section backgrounds) ---------- */
+
+/* Soft blurred blue washes on a pale base, in the manner of a clean AI product page. */
+.hero-bg {
+  background:
+    linear-gradient(to bottom, rgb(244 248 255 / 0) 78%, var(--bg) 100%),
+    radial-gradient(48% 55% at 6% 92%, rgb(59 130 246 / 0.3) 0%, rgb(59 130 246 / 0) 70%),
+    radial-gradient(42% 50% at 92% 8%, rgb(124 92 255 / 0.18) 0%, rgb(124 92 255 / 0) 70%),
+    radial-gradient(40% 36% at 52% 0%, rgb(147 197 253 / 0.45) 0%, rgb(147 197 253 / 0) 75%),
+    var(--bg);
+}
+
+/* Faint engineering grid, fading out toward the edges. */
+.grid-lines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgb(37 99 235 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(37 99 235 / 0.07) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(75% 85% at 60% 35%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(75% 85% at 60% 35%, #000 0%, transparent 78%);
+  pointer-events: none;
+}
+
+.section-glow {
+  background:
+    radial-gradient(50% 70% at 12% 50%, rgb(59 130 246 / 0.12) 0%, rgb(59 130 246 / 0) 70%),
+    radial-gradient(40% 60% at 96% 90%, rgb(124 92 255 / 0.08) 0%, rgb(124 92 255 / 0) 70%),
+    var(--bg-elevated);
+}
+
+.cta-bg {
+  background:
+    radial-gradient(55% 120% at 88% 100%, rgb(59 130 246 / 0.22) 0%, rgb(59 130 246 / 0) 65%),
+    radial-gradient(40% 90% at 0% 0%, rgb(124 92 255 / 0.1) 0%, rgb(124 92 255 / 0) 70%),
+    var(--bg);
+}
+
+/* ---------- 3D panels ---------- */
+
+.panel {
+  position: relative;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-card);
+  background: linear-gradient(160deg, #ffffff 0%, #f1f6ff 100%);
+  box-shadow: var(--panel-shadow);
+}
+
+.panel-ghost {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+  background: rgb(255 255 255 / 0.55);
+}
+
+.hv-stage {
+  transform-style: preserve-3d;
+  transform: perspective(1400px) rotateX(calc(7deg + var(--hv-x, 0deg)))
+    rotateY(calc(-13deg + var(--hv-y, 0deg)));
+  transition: transform 300ms ease-out;
+}
+
+@media (max-width: 767px) {
+  .hv-stage {
+    transform: perspective(1400px) rotateX(calc(4deg + var(--hv-x, 0deg)))
+      rotateY(calc(-7deg + var(--hv-y, 0deg)));
+  }
+}
+
+.hv-layer {
+  transform-style: preserve-3d;
+}
+
+/* Cards that tilt toward the pointer, lift, and show a violet rim on hover. */
+.tilt-card {
+  position: relative;
+  transform: perspective(1100px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg))
+    translateY(var(--lift, 0px));
+  transition:
+    transform 220ms ease-out,
+    box-shadow 220ms ease-out,
+    border-color 220ms ease-out;
+}
+
+.tilt-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    380px circle at var(--glow-x, 50%) var(--glow-y, 0%),
+    rgb(59 130 246 / 0.13),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 220ms ease-out;
+  pointer-events: none;
+}
+
+.tilt-card:hover,
+.tilt-card:focus-within {
+  border-color: rgb(37 99 235 / 0.55);
+  box-shadow: var(--rim), var(--panel-shadow);
+}
+
+.tilt-card:hover::before,
+.tilt-card:focus-within::before {
+  opacity: 1;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tilt-card:hover {
+    --lift: -4px;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+/* Gentle floating on selected decorative panels, each with its own slow timing. */
+@media (prefers-reduced-motion: no-preference) {
+  .float-a {
+    animation: float-a 9s ease-in-out infinite;
+  }
+  .float-b {
+    animation: float-b 11s ease-in-out infinite;
+  }
+  .float-c {
+    animation: float-c 13s ease-in-out infinite;
+  }
+  @keyframes float-a {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -10px;
+    }
+  }
+  @keyframes float-b {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 9px;
+    }
+  }
+  @keyframes float-c {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -7px;
+    }
+  }
+
+  /* The single page-load sequence: the hero settles in. */
+  .hero-rise {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: hero-rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  .hero-rise-2 {
+    animation-delay: 120ms;
+  }
+  .hero-rise-3 {
+    animation-delay: 240ms;
+  }
+  @keyframes hero-rise {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .pulse-dot {
+    animation: pulse-dot 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+}
+
+/* Reduced motion: no tilt, no lift, no float, no parallax. Static depth remains. */
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card {
+    transform: none !important;
+  }
+  .hv-stage {
+    transition: none;
+  }
+}
+
+/* ---------- Buttons ---------- */
+
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background-image: linear-gradient(110deg, #1d63f0 0%, #4a55ee 38%, #6b4deb 62%, #1d63f0 100%);
+  background-size: 240% 100%;
+  background-position: 0% 50%;
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.38) 50%, transparent 65%);
+  transform: translateX(-130%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-primary:hover::after,
+  .btn-primary:focus-visible::after {
+    transform: translateX(130%);
+    transition: transform 800ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+/* ---------- Hero chat preview ---------- */
+
+@property --chat-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* A thin light travels around the frame. It brightens while "typing". */
+.chat-frame {
+  padding: 1.5px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--chat-angle),
+    rgb(37 99 235 / 0.16) 0%,
+    rgb(37 99 235 / 0.16) 38%,
+    #2563eb 54%,
+    #7c5cff 68%,
+    rgb(37 99 235 / 0.16) 84%
+  );
+  box-shadow:
+    0 44px 80px -44px rgb(37 99 235 / 0.5),
+    0 14px 36px -18px rgb(15 40 100 / 0.2);
+  transition: box-shadow 400ms ease-out;
+}
+
+.chat-frame[data-active="true"] {
+  box-shadow:
+    0 50px 90px -40px rgb(37 99 235 / 0.7),
+    0 0 0 6px rgb(37 99 235 / 0.07),
+    0 14px 36px -18px rgb(15 40 100 / 0.2);
+}
+
+.chat-char {
+  transition:
+    opacity 520ms ease-out,
+    filter 520ms ease-out,
+    color 520ms ease-out;
+}
+
+.chat-char[data-leaving="true"] {
+  opacity: 0;
+  filter: blur(7px);
+  color: #7c5cff;
+}
+
+.chat-node {
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transition:
+    opacity 420ms ease-out,
+    transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.chat-node[data-on="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.chat-send[data-press="true"] {
+  transform: scale(0.9);
+}
+
+.chat-send[data-ping="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid rgb(37 99 235 / 0.55);
+  animation: send-ping 900ms ease-out forwards;
+}
+
+@keyframes send-ping {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .chat-frame {
+    animation: chat-spin 7s linear infinite;
+  }
+  @keyframes chat-spin {
+    to {
+      --chat-angle: 360deg;
+    }
+  }
+  .chat-caret {
+    animation: chat-caret 1.05s steps(1) infinite;
+  }
+  @keyframes chat-caret {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+/* Reduced motion: a plain frame, a still prompt, no travelling light. */
+@media (prefers-reduced-motion: reduce) {
+  .chat-frame {
+    background: var(--border-strong);
+  }
+  .chat-char,
+  .chat-node,
+  .chat-send {
+    transition: none;
+  }
+}
+
+/* ---------- Animated buttons ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-animated {
+    animation: btn-flow 7s ease-in-out infinite;
+    animation-delay: var(--btn-delay, 0s);
+  }
+  .btn-animated::after {
+    animation: btn-shine 5.5s ease-in-out infinite;
+    animation-delay: calc(var(--btn-delay, 0s) + 1.4s);
+  }
+  @keyframes btn-flow {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  @keyframes btn-shine {
+    0%,
+    65% {
+      transform: translateX(-130%);
+    }
+    100% {
+      transform: translateX(130%);
+    }
+  }
+
+  /* ---------- Animated title ---------- */
+  .title-word {
+    display: inline-block;
+    animation:
+      word-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards,
+      word-wave 7s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 110ms), calc(1.8s + var(--i) * 0.45s);
+  }
+  @keyframes word-in {
+    from {
+      opacity: 0;
+      filter: blur(12px);
+      transform: translateY(0.4em);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: none;
+    }
+  }
+  @keyframes word-wave {
+    0%,
+    30%,
+    100% {
+      color: var(--text);
+    }
+    12% {
+      color: #2563eb;
+    }
+    20% {
+      color: #7c5cff;
+    }
+  }
+}
+
+.title-word {
+  display: inline-block;
+}
