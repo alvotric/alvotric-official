@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
@@ -5,7 +6,7 @@ import { StatusBadge } from "@/components/ui/Badge";
 import { LinkButton } from "@/components/ui/Button";
 import { TiltCard } from "@/components/ui/TiltCard";
 import { WorkflowPanel } from "@/components/visual/WorkflowPanel";
-import { alvo } from "@/content/products";
+import { alvo, protodb } from "@/content/products";
 import { alvoLink } from "@/content/site.config";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -22,7 +23,7 @@ export default function ProductsPage() {
     <>
       <PageHeader
         title="Products"
-        lede="Alvotric is the company. Alvo is the first product it is building. Each product is labeled with its real status."
+        lede="Alvotric is the company. Alvo is its flagship product, and ProtoDB is its second project. Each product is labeled with its real status."
       />
 
       <section aria-labelledby="alvo-card-heading" className="section-glow border-b border-line">
@@ -55,13 +56,47 @@ export default function ProductsPage() {
         </Container>
       </section>
 
+      <section aria-labelledby="protodb-card-heading" className="border-b border-line">
+        <Container className="py-20 sm:py-24 lg:py-28">
+          <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-5">
+              <StatusBadge status={protodb.status} />
+              <h2 id="protodb-card-heading" className="mt-6 text-[clamp(2.5rem,5.5vw,4.5rem)] font-semibold leading-none">
+                {protodb.name}
+              </h2>
+              <p className="mt-6 max-w-[44ch] text-lg text-muted sm:text-xl">{protodb.summary}</p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <LinkButton href={protodb.internalPath} size="lg">
+                  Product details
+                </LinkButton>
+                <LinkButton href={protodb.appUrl} external variant="secondary" size="lg">
+                  Open ProtoDB
+                </LinkButton>
+              </div>
+            </div>
+            <div className="lg:col-span-7">
+              <div className="overflow-hidden rounded-[var(--radius-card)] border border-line-strong bg-elevated shadow-[var(--panel-shadow)]">
+                <Image
+                  src="/protodb/schema-map.webp"
+                  alt="ProtoDB schema map showing tables linked by relationship lines"
+                  width={1448}
+                  height={885}
+                  sizes="(min-width: 1024px) 700px, 100vw"
+                />
+              </div>
+              <p className="mt-4 text-[0.8125rem] text-subtle">Screenshot of the ProtoDB schema map.</p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       <Section id="future-products">
         <div className="panel-ghost p-8 sm:p-12">
           <StatusBadge status="planned" />
           <h2 className="mt-6 text-3xl font-semibold text-muted sm:text-4xl">Future products</h2>
           <p className="mt-4 max-w-[52ch] text-lg text-muted">
-            Additional products may follow. This space is intentionally empty: nothing beyond Alvo has been
-            announced.
+            Additional products may follow. This space is intentionally empty: nothing beyond Alvo and ProtoDB
+            has been announced.
           </p>
         </div>
       </Section>

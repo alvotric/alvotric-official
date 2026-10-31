@@ -48,6 +48,18 @@ export const alvo = {
   ] satisfies Capability[],
 };
 
+export const protodb = {
+  name: "ProtoDB",
+  status: "in-development" as Status,
+  version: "v0.1.1",
+  summary:
+    "A clean admin interface for your database. Browse tables, see how they relate on a live schema map and run PostgreSQL straight from the browser.",
+  /** Where "Open ProtoDB" goes. */
+  appUrl: "https://alvotric.netlify.app",
+  sourceUrl: "https://github.com/alvotric/protodb",
+  internalPath: "/products/protodb",
+};
+
 export const focusAreas = [
   {
     title: "AI-assisted development",
